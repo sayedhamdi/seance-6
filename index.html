@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="text" name="" id="todo" />
+    <button>add</button>
+    <ul id="list"></ul>
+  </body>
+  <script>
+    let button = document.querySelector("button");
+    let input = document.querySelector("#todo");
+    let list = document.querySelector("#list");
+    let todos = [];
+
+    // init
+
+    init();
+    function saveToLocalStorage() {
+      localStorage.setItem("valueOfInput", input.value);
+    }
+
+    function init() {
+      if (localStorage.getItem("valueOfInput")) {
+        input.value = localStorage.getItem("valueOfInput");
+      }
+      if (localStorage.getItem("todos")) {
+        todos = JSON.parse(localStorage.getItem("todos"));
+        todos.forEach((todo) => {
+          let li = `<li>${todo}</li>`;
+          list.innerHTML += li;
+        });
+      }
+    }
+
+    function add() {
+      //method 1
+      let li = document.createElement("li");
+      li.innerHTML = input.value;
+      todos.push(input.value);
+      //method 2
+      localStorage.setItem("todos", JSON.stringify(todos));
+
+      //let li = `<li>${input.value}</li>`;
+
+      //list.innerHTML += li;
+      list.appendChild(li);
+      input.value = "";
+      saveToLocalStorage();
+    }
+
+    input.onkeyup = saveToLocalStorage;
+
+    button.onclick = add;
+  </script>
+</html>
